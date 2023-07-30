@@ -1,25 +1,6 @@
 import sys
 import socket as soc
 
-class WebServer:
-    def __init__(self, port) :
-        self.dataBase = Database()        
-        self.serversocket = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
-        self.serversocket.bind(('', port))
-        self.buffer = b""
-    def execute(self):
-        self.serversocket.listen()
-        while True:
-            connectSocket , cilent_ip = self.serversocket.accept()
-            request = Request(connectSocket, self.dataBase)
-            while True:
-                listOfComponents = request.process_header()
-                if len(listOfComponents) == 0:
-                    connectSocket.close()
-                    break
-                returnResponse = request.execute_header(listOfComponents[0],listOfComponents[1],listOfComponents[2],listOfComponents[3])
-                connectSocket.sendall(returnResponse)
-
 class Request:
     def __init__(self, socket, dataBase):
         self.socket = socket
